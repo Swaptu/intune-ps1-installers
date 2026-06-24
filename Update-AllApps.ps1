@@ -52,7 +52,7 @@ function Get-WinGet {
 function Resolve-InstalledId {
     param([string]$IdPrefix)
 
-    $output = & $winget list --id $IdPrefix 2>&1
+    $output = & $winget list --id $IdPrefix --source winget --accept-source-agreements --disable-interactivity 2>&1
 
     foreach ($line in $output) {
         if ($line -match "(?i)($([regex]::Escape($IdPrefix))\S*)") {
