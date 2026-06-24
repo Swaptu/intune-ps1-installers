@@ -124,7 +124,7 @@ try {
         if ($wasRunning) { Write-Log "  Proceeding with upgrade." }
 
         Write-Log "  Upgrading $($app.Name)..."
-        $output   = & $winget upgrade --id $resolvedId --exact --silent --source winget --accept-source-agreements --disable-interactivity --accept-package-agreements 2>&1
+        $output   = & $winget install --id $resolvedId --exact --silent --source winget --accept-source-agreements --disable-interactivity --accept-package-agreements 2>&1
         $exitCode = $LASTEXITCODE
 
         $output | ForEach-Object { Write-Log "  $_" }

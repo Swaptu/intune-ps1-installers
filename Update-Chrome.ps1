@@ -1,16 +1,16 @@
 # ============================================================
-# Update-NotepadPlusPlus.ps1
-# Intune-deployed script — silently upgrades Notepad++
+# Update-Chrome.ps1
+# Intune-deployed script — silently upgrades Google Chrome
 # Logs to: C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\
 # ============================================================
 
-$LogFile = "C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\Update-NotepadPlusPlus.log"
+$LogFile = "C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\Update-Chrome.log"
 $LogDir  = Split-Path $LogFile
 
 if (-not (Test-Path $LogDir)) { New-Item -Path $LogDir -ItemType Directory -Force | Out-Null }
 
 $Apps = @(
-    @{ Name = "Notepad++"; IdPrefix = "Notepad++.Notepad++"; Processes = @("notepad++") }
+    @{ Name = "Google Chrome"; IdPrefix = "Google.Chrome"; Processes = @("chrome") }
 )
 
 function Write-Log {
@@ -53,7 +53,7 @@ function Resolve-InstalledId {
 
 try {
     Invoke-LogRotation
-    Write-Log "====== Update-NotepadPlusPlus started ======"
+    Write-Log "====== Update-Chrome started ======"
 
     $winget = Get-WinGet
     if (-not $winget) { throw "winget.exe could not be located on this system." }
@@ -93,7 +93,7 @@ try {
         if ($wasRunning) { Write-Log "  Proceeding with upgrade." }
 
         Write-Log "  Upgrading $($app.Name)..."
-        $output   = & $winget upgrade --id $resolvedId --exact --silent --source winget --accept-source-agreements --disable-interactivity --accept-package-agreements 2>&1
+        $output   = & $winget install --id $resolvedId --exact --silent --source winget --accept-source-agreements --disable-interactivity --accept-package-agreements 2>&1
         $exitCode = $LASTEXITCODE
 
         $output | ForEach-Object { Write-Log "  $_" }
@@ -118,10 +118,10 @@ try {
         Write-Log "  $($r.App): $($r.Status) (exit $($r.Code))" -Level $level
     }
 
-    Write-Log "====== Update-NotepadPlusPlus finished ======"
+    Write-Log "====== Update-Chrome finished ======"
     exit ($anyFailed ? 1 : 0)
 }
 catch {
-    Write-Log "====== Update-NotepadPlusPlus FAILED: $_ ======" -Level ERROR
+    Write-Log "====== Update-Chrome FAILED: $_ ======" -Level ERROR
     exit 1
 }

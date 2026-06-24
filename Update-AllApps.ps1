@@ -110,8 +110,8 @@ foreach ($app in $Apps) {
     }
     if ($wasRunning) { Write-Log "  Proceeding with upgrade." }
 
-    Write-Log "  $($app.Name) found — upgrading."
-    $output   = & $winget upgrade --id $resolvedId --exact --silent --accept-source-agreements --accept-package-agreements 2>&1
+    Write-Log "  $($app.Name) found — installing/upgrading."
+    $output   = & $winget install --id $resolvedId --exact --silent --source winget --accept-source-agreements --disable-interactivity --accept-package-agreements 2>&1
     $exitCode = $LASTEXITCODE
 
     $output | ForEach-Object { Write-Log "  $_" }
